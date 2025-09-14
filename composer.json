@@ -29,7 +29,9 @@
     }
   },
   "require": {
-    "illuminate/support": "^12.28"
+    "illuminate/support": "^12.28",
+    "phpoffice/phpspreadsheet": "^5.1",
+    "nesbot/carbon": "^3.10"
   },
   "require-dev": {
     "orchestra/testbench": "^10.6"
