@@ -1,0 +1,46 @@
+# Composer
+/vendor/
+/composer.lock
+
+# Node / NPM
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+/pnpm-debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.phpstorm.meta.php
+
+# Laravel / PHP
+.env
+.phpunit.result.cache
+/storage/
+homestead.yaml
+Homestead.json
+
+# Cache & compiled files
+/bootstrap/cache/
+*.log
+*.cache
+*.tmp
+
+# Testing / coverage
+coverage/
+*.sqlite
+phpunit.xml
+
+# Build artifacts
+/public/hot
+/public/storage
+/public/mix-manifest.json
+
+# Ignore local development symlinked packages
+/vendor/*/*
