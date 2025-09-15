@@ -1,6 +1,6 @@
 <?php
 
-namespace Laralib\Console\Commands;
+namespace Artibet\Laralib\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
