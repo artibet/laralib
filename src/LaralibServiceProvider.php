@@ -3,7 +3,7 @@
 namespace Artibet\Laralib;
 
 use Illuminate\Support\ServiceProvider;
-
+use Laralib\Console\Commands\MakePaginator;
 
 class LaralibServiceProvider extends ServiceProvider
 {
@@ -12,7 +12,16 @@ class LaralibServiceProvider extends ServiceProvider
   // ---------------------------------------------------------------------------------------
   public function boot()
   {
-    // /
+    if ($this->app->runningInConsole()) {
+      $this->commands([
+        MakePaginator::class,
+      ]);
+
+      // Allow publishing of stubs
+      $this->publishes([
+        __DIR__ . '/Console/stubs/paginator.stub' => base_path('stubs/paginator.stub'),
+      ], 'laralib-stubs');
+    }
   }
 
   // ---------------------------------------------------------------------------------------

@@ -1,0 +1,36 @@
+<?php
+
+namespace DummyNamespace;
+
+use Artibet\Laralib\Abstracts\PaginatorBase;
+use Illuminate\Database\Eloquent\Builder;
+
+class DummyClass extends PaginatorBase
+{
+  // ---------------------------------------------------------------------------------------
+  // Override abstract method getColumns
+  // ---------------------------------------------------------------------------------------
+  public function getColumns(): array
+  {
+    return [
+      // ['id' => 'name', 'type' => 'string'],
+      // ...
+    ];
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override abstract method getQuery()
+  // ---------------------------------------------------------------------------------------
+  public function getQuery(): Builder
+  {
+    // Return User:all()
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override abstract method getResourceClass()
+  // ---------------------------------------------------------------------------------------
+  public function getResourceClass(): string
+  {
+    //return UserViewResource::class;
+  }
+}

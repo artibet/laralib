@@ -2,6 +2,7 @@
 
 namespace Artibet\Laralib\Abstracts;
 
+use Artibet\Laralib\Support\Numbers;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 
 abstract class PaginatorBase
 {
-  /*
+
   // ---------------------------------------------------------------------------------------
   // Abstract overriden methods
   // ---------------------------------------------------------------------------------------
@@ -99,7 +100,6 @@ abstract class PaginatorBase
           return;
         }
       });
-      // dd($query->toSql(), $query->getBindings());
     }
   }
 
@@ -166,7 +166,7 @@ abstract class PaginatorBase
           $footer = $q->sum($column['id']);
           $postfix = array_key_exists('postfix', $columnFooter) ? $columnFooter['postfix'] : '';
           if ($columnFooter['format'] == 'currency') {
-            $footer = \Artibet\PhpUtils\Numbers::formatCurrency($footer) . $postfix;
+            $footer = Numbers::formatCurrency($footer) . $postfix;
           } else if ($columnFooter['format'] == 'float') {
             $footer = number_format($footer, 2, ',', '.') . $postfix;
           }
@@ -207,5 +207,4 @@ abstract class PaginatorBase
       'footer' => $this->getFooter($request),
     ];
   }
-    */
 }
