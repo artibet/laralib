@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Services\ApplicationCheck;
+
+use Artibet\Laralib\Abstracts\ExportBase;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
+class Export extends ExportBase
+{
+  // ---------------------------------------------------------------------------------------
+  // Override: templatePath()
+  // ---------------------------------------------------------------------------------------
+  protected function templatePath(): string
+  {
+    return storage_path('app/private/templates/export_template.xlsx');
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override: filename
+  // ---------------------------------------------------------------------------------------
+  protected function filename(): string
+  {
+    return "export.xlsx";
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override: build($sheet)
+  // ---------------------------------------------------------------------------------------
+  protected function build(Worksheet $sheet): void
+  {
+    $row = 2;
+    foreach ([] as $record) {
+      $sheet->setCellValue("A{$row}", $row - 1);
+      // ...
+      $row += 1;
+    }
+  }
+}
