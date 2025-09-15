@@ -13,7 +13,7 @@ class Dates
   /**
    * Format date (iso string) to dd/mm/yyyy
    */
-  public static function formatDate(string $isoString): string
+  public static function formatDate(?string $isoString): string
   {
     if (!$isoString) return '';
     return (new Carbon($isoString))->setTimeZone('Europe/Athens')->format('d/m/Y');
@@ -22,7 +22,7 @@ class Dates
   /**
    * Format data (iso string) to hh:mm
    */
-  public static function formatTime(string $isoString): string
+  public static function formatTime(?string $isoString): string
   {
     if (!$isoString) return '';
     return (new Carbon($isoString))->setTimeZone('Europe/Athens')->format('H:i');
@@ -31,7 +31,7 @@ class Dates
   /**
    * Format date (iso string) to dd/mm/yyyy, hh:mm
    */
-  public static function formatDateTime(string $isoString): string
+  public static function formatDateTime(?string $isoString): string
   {
     if (!$isoString) return '';
     return (new Carbon($isoString))->setTimeZone('Europe/Athens')->format('d/m/Y, H:i');
