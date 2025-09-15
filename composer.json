@@ -18,13 +18,13 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "VendorName\\MyPackage\\Tests\\": "tests/"
+      "Artibet\\Laralib\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "artibet\\laralib\\LaralibServiceProvider"
+        "Artibet\\Laralib\\LaralibServiceProvider"
       ]
     }
   },
