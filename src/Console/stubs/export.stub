@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\ApplicationCheck;
+namespace DummyNamespace;
 
 use Artibet\Laralib\Abstracts\ExportBase;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class Export extends ExportBase
+class DummyClass extends ExportBase
 {
   // ---------------------------------------------------------------------------------------
   // Override: templatePath()
