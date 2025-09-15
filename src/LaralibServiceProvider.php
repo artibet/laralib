@@ -2,8 +2,8 @@
 
 namespace Artibet\Laralib;
 
+use Artibet\Laralib\Console\Commands\MakePaginator;
 use Illuminate\Support\ServiceProvider;
-use Laralib\Console\Commands\MakePaginator;
 
 class LaralibServiceProvider extends ServiceProvider
 {
