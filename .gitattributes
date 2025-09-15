@@ -1,0 +1,11 @@
+/.gitignore         export-ignore
+/.gitattributes     export-ignore
+/.github            export-ignore
+/.editorconfig      export-ignore
+/.idea              export-ignore
+/phpunit.xml.dist   export-ignore
+/phpunit.xml        export-ignore
+/tests              export-ignore
+/.env.example       export-ignore
+/docker-compose.yml export-ignore
+/.vscode            export-ignore
