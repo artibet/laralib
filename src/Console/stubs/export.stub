@@ -7,6 +7,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class DummyClass extends ExportBase
 {
+  private iterable $records;
+
+  // ---------------------------------------------------------------------------------------
+  // Constructor - set records
+  // ---------------------------------------------------------------------------------------
+  public function __construct(iterable $records)
+  {
+    $this->records = $records;
+  }
+
   // ---------------------------------------------------------------------------------------
   // Override: templatePath()
   // ---------------------------------------------------------------------------------------
@@ -29,7 +39,7 @@ class DummyClass extends ExportBase
   protected function build(Worksheet $sheet): void
   {
     $row = 2;
-    foreach ([] as $record) {
+    foreach ($this->records as $record) {
       $sheet->setCellValue("A{$row}", $row - 1);
       // ...
       $row += 1;
