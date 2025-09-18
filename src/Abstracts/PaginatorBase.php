@@ -149,7 +149,7 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   protected function getFooter(Request $request)
   {
-    $footer = [];
+    $footerArray = [];
 
     $footerQuery = clone $this->getQuery();
     $this->applyGlobalFilter($request, $footerQuery);
@@ -171,11 +171,11 @@ abstract class PaginatorBase
             $footer = number_format($footer, 2, ',', '.') . $postfix;
           }
         }
-        $footer[$column['id']] = $footer;
+        $footerArray[$column['id']] = $footer;
       }
     }
 
-    return $footer;
+    return $footerArray;
   }
 
   // ---------------------------------------------------------------------------------------
