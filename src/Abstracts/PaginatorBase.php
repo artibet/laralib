@@ -10,18 +10,27 @@ use Illuminate\Http\Request;
 
 abstract class PaginatorBase
 {
+  protected Request $request;
+
+  // ---------------------------------------------------------------------------------------
+  // constructor
+  // ---------------------------------------------------------------------------------------
+  public function __construct(request $request)
+  {
+    $this->request = $request;
+  }
 
   // ---------------------------------------------------------------------------------------
   // Abstract overriden methods
   // ---------------------------------------------------------------------------------------
-  protected abstract function getColumns(): array;
-  protected abstract function getQuery(): Builder;
-  protected abstract function getResourceClass(): string;
+  protected abstract function columns(): array;
+  protected abstract function query(): Builder;
+  protected abstract function resourceClass(): string;
 
   // ---------------------------------------------------------------------------------------
   // Default primary key - override if needed
   // ---------------------------------------------------------------------------------------
-  protected function getPrimaryKey(): string
+  protected function primaryKey(): string
   {
     return 'id';
   }
@@ -29,7 +38,7 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Default sorting direction - override if needed
   // ---------------------------------------------------------------------------------------
-  protected function getDefaultSortDirection(): string
+  protected function defaultSortingDirection(): string
   {
     return 'asc';
   }
@@ -38,13 +47,13 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Global filter
   // ---------------------------------------------------------------------------------------
-  protected function applyGlobalFilter(Request $request, $query)
+  protected function applyGlobalFilter($query)
   {
-    $globalFilter = $request->globalFilter;
+    $globalFilter = $this->request->globalFilter;
     if (!$globalFilter) return;
 
     $query->where(function ($q) use ($globalFilter) {
-      foreach ($this->getColumns() as $column) {
+      foreach ($this->columns() as $column) {
         if ($column['type'] == 'string') {
           $q->orWhere($column['id'], 'like', "%$globalFilter%");
         } else if ($column['type'] == 'number' && is_numeric($globalFilter)) {
@@ -65,15 +74,15 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Colulmn filters
   // ---------------------------------------------------------------------------------------
-  protected function applyColumnFilters(Request $request, $query)
+  protected function applyColumnFilters($query)
   {
-    $columnFilters = json_decode($request->columnFilters);
+    $columnFilters = json_decode($this->request->columnFilters);
 
     if (!$columnFilters) return;
 
     foreach ($columnFilters as $columnFilter) {
       $query->where(function ($q) use ($columnFilter) {
-        foreach ($this->getColumns() as $column) {
+        foreach ($this->columns() as $column) {
           // scan columns to find the one with filter - we need the type
           if ($column['id'] !== $columnFilter->id) continue;
 
@@ -106,9 +115,9 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Sorting 
   // ---------------------------------------------------------------------------------------
-  protected function applySorting(Request $request, $query)
+  protected function applySorting($query)
   {
-    $sorting = json_decode($request->sorting);
+    $sorting = json_decode($this->request->sorting);
 
     // Create an orderBy clause for each sorting column
     foreach ($sorting as $sortingColumn) {
@@ -118,22 +127,9 @@ abstract class PaginatorBase
     }
 
     // Add default sorting on id
-    $query->orderBy($this->getPrimaryKey(), $this->getDefaultSortDirection());
+    $query->orderBy($this->primaryKey(), $this->defaultSortingDirection());
   }
 
-
-  // ---------------------------------------------------------------------------------------
-  // Get Data
-  // ---------------------------------------------------------------------------------------
-  protected function getRows(Request $request)
-  {
-    $dataQuery = clone $this->getQuery();
-    $this->applyGlobalFilter($request, $dataQuery);
-    $this->applyColumnFilters($request, $dataQuery);
-    $this->applySorting($request, $dataQuery);
-
-    return $dataQuery->skip(($request->page - 1) * $request->pageSize)->take($request->pageSize)->get();
-  }
 
   // ---------------------------------------------------------------------------------------
   // Count Total Rows
@@ -147,15 +143,15 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Create and return the footer
   // ---------------------------------------------------------------------------------------
-  protected function getFooter(Request $request)
+  protected function buildFooter()
   {
     $footerArray = [];
 
-    $footerQuery = clone $this->getQuery();
-    $this->applyGlobalFilter($request, $footerQuery);
-    $this->applyColumnFilters($request, $footerQuery);
+    $footerQuery = clone $this->query();
+    $this->applyGlobalFilter($footerQuery);
+    $this->applyColumnFilters($footerQuery);
 
-    foreach ($this->getColumns() as $column) {
+    foreach ($this->columns() as $column) {
       if (array_key_exists('footer', $column)) {
         $columnFooter = $column['footer'];
         $footer  = '';
@@ -181,30 +177,30 @@ abstract class PaginatorBase
   // ---------------------------------------------------------------------------------------
   // Get query after applying sorting and filtering
   // ---------------------------------------------------------------------------------------
-  public function buildQuery(Request $request): Builder
+  public function getQuery(): Builder
   {
-    $query = clone $this->getQuery();
-    $this->applyGlobalFilter($request, $query);
-    $this->applyColumnFilters($request, $query);
-    $this->applySorting($request, $query);
+    $query = clone $this->query();
+    $this->applyGlobalFilter($query);
+    $this->applyColumnFilters($query);
+    $this->applySorting($query);
     return $query;
   }
 
   // ---------------------------------------------------------------------------------------
   // Return response array
   // ---------------------------------------------------------------------------------------
-  public function response(Request $request): array
+  public function response(): array
   {
-    $resourceClass = $this->getResourceClass();
-    $dataQuery = $this->buildQuery($request);
-    $data = $dataQuery->skip(($request->page - 1) * $request->pageSize)->take($request->pageSize)->get();
+    $resourceClass = $this->resourceClass();
+    $dataQuery = $this->getQuery();
+    $data = $dataQuery->skip(($this->request->page - 1) * $this->request->pageSize)->take($this->request->pageSize)->get();
 
     return [
       'data' => $resourceClass::collection($data),
-      'total' => $this->buildQuery($request)->count(),
-      'page' => (int)($request->page),
-      'page_size' => (int)($request->pageSize),
-      'footer' => $this->getFooter($request),
+      'total' => $this->getQuery()->count(),
+      'page' => (int)($this->request->page),
+      'page_size' => (int)($this->request->pageSize),
+      'footer' => $this->buildFooter(),
     ];
   }
 }
