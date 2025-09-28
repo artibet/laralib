@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 class DummyClass extends PaginatorBase
 {
   // ---------------------------------------------------------------------------------------
-  // Override abstract method getColumns
+  // Override abstract method columns()
   // ---------------------------------------------------------------------------------------
-  public function getColumns(): array
+  protected function columns(): array
   {
     return [
       // ['id' => 'name', 'type' => 'string'],
@@ -19,17 +19,17 @@ class DummyClass extends PaginatorBase
   }
 
   // ---------------------------------------------------------------------------------------
-  // Override abstract method getQuery()
+  // Override abstract method query()
   // ---------------------------------------------------------------------------------------
-  public function getQuery(): Builder
+  protected function query(): Builder
   {
     // Return User:all()
   }
 
   // ---------------------------------------------------------------------------------------
-  // Override abstract method getResourceClass()
+  // Override abstract method resourceClass()
   // ---------------------------------------------------------------------------------------
-  public function getResourceClass(): string
+  protected function resourceClass(): string
   {
     //return UserViewResource::class;
   }
