@@ -12,7 +12,9 @@ class DummyClass extends DocumentBase
   // ---------------------------------------------------------------------------------------
   public function __construct()
   {
-    //
+    parent::__construct();
+
+    // Add custom constructor login here
   }
 
   // ---------------------------------------------------------------------------------------
