@@ -1,0 +1,47 @@
+<?php
+
+namespace DummyNamespace;
+
+use Artibet\Laralib\Abstracts\DocumentBase;
+use PhpOffice\PhpWord\TemplateProcessor;
+
+class DummyClass extends DocumentBase
+{
+  // ---------------------------------------------------------------------------------------
+  // Constructor - set records
+  // ---------------------------------------------------------------------------------------
+  public function __construct()
+  {
+    //
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override: templatePath()
+  // ---------------------------------------------------------------------------------------
+  protected function templatePath(): string
+  {
+    return storage_path('app/private/templates/export_template.docx');
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override: basename()
+  // (Without docx or pdf extension)
+  // ---------------------------------------------------------------------------------------
+  protected function basename(): string
+  {
+    return "mydocument";
+  }
+
+  // ---------------------------------------------------------------------------------------
+  // Override: build($template)
+  // ---------------------------------------------------------------------------------------
+  protected function build(TemplateProcessor $template): void
+  {
+    /*
+     * Set document placeholders hera.
+     * example:
+     * $template->setValue('title', htmlspecialchars($title));
+     *
+    */
+  }
+}

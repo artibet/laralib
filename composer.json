@@ -30,6 +30,7 @@
   },
   "require": {
     "phpoffice/phpspreadsheet": "^5.1",
+    "phpoffice/phpword": "^1.4",
     "nesbot/carbon": "^3.10"
   },
   "require-dev": {
