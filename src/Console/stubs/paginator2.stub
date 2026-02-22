@@ -2,10 +2,10 @@
 
 namespace DummyNamespace;
 
-use Artibet\Laralib\Abstracts\PaginatorBase;
+use Artibet\Laralib\Abstracts\Paginator2Base;
 use Illuminate\Database\Eloquent\Builder;
 
-class DummyClass extends PaginatorBase
+class DummyClass extends Paginator2Base
 {
   // ---------------------------------------------------------------------------------------
   // Override abstract method columns()
@@ -13,8 +13,7 @@ class DummyClass extends PaginatorBase
   protected function columns(): array
   {
     return [
-      // ['id' => 'name', 'type' => 'string'],
-      // ...
+      //
     ];
   }
 
