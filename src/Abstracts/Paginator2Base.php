@@ -54,12 +54,16 @@ abstract class Paginator2Base
     // to prevent OR logic from leaking into other query constraints.
     $query->where(function ($subQuery) use ($value) {
       foreach ($this->columns() as $column) {
-        // Only include columns that have a search closure defined
-        if (isset($column['search']) && is_callable($column['search'])) {
 
-          // Use orWhere so that it matches Column A OR Column B OR Column C
-          $subQuery->orWhere(function ($q) use ($column, $value) {
-            $column['search']($q, $value);
+        // 1. Prioritize 'global', then fallback to 'search'.
+        // Note: We ignore 'filter' here because column-specific filters
+        // are usually too strict (exact IDs) for a general text search.
+        $closure = $column['global'] ?? $column['search'] ?? null;
+
+        // 2. Use orWhere so that it matches Column A OR Column B OR Column C
+        if (is_callable($closure)) {
+          $subQuery->orWhere(function ($q) use ($closure, $value) {
+            $closure($q, $value);
           });
         }
       }
@@ -78,15 +82,17 @@ abstract class Paginator2Base
       $id = $filter['id'];
       $value = $filter['value'];
 
-      // Skip if column isn't defined or doesn't have a search closure
-      if (!isset($columnDefs[$id]['search']) || !is_callable($columnDefs[$id]['search'])) {
+      // 1. Identify the best closure to use: 'filter' first, then fallback to 'search'
+      $closure = $columnDefs[$id]['filter'] ?? $columnDefs[$id]['search'] ?? null;
+
+      // 2. Skip if no valid closure is found
+      if (!is_callable($closure)) {
         continue;
       }
 
-      // We wrap the custom closure in a where() block to ensure 
-      // parameter grouping in the resulting SQL.
-      $query->where(function ($subQuery) use ($columnDefs, $id, $value) {
-        $columnDefs[$id]['search']($subQuery, $value);
+      // 3. Wrap in a where block for SQL parameter grouping
+      $query->where(function ($subQuery) use ($closure, $value) {
+        $closure($subQuery, $value);
       });
     }
   }
