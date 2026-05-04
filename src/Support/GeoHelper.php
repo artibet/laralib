@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace Artibet\Laralib\Support;
 
 class GeoHelper
 {
